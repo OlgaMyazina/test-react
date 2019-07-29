@@ -1,20 +1,20 @@
 {
   "files": {
-    "main.css": "/static/css/main.9a51dfd7.chunk.css",
-    "main.js": "/static/js/main.bf6bfd1a.chunk.js",
-    "main.js.map": "/static/js/main.bf6bfd1a.chunk.js.map",
-    "runtime~main.js": "/static/js/runtime~main.a8a9905a.js",
-    "runtime~main.js.map": "/static/js/runtime~main.a8a9905a.js.map",
-    "static/js/2.e8ff0b7d.chunk.js": "/static/js/2.e8ff0b7d.chunk.js",
-    "static/js/2.e8ff0b7d.chunk.js.map": "/static/js/2.e8ff0b7d.chunk.js.map",
-    "index.html": "/index.html",
-    "precache-manifest.d61b7498a9dec5a07e5dceb12f679d74.js": "/precache-manifest.d61b7498a9dec5a07e5dceb12f679d74.js",
-    "service-worker.js": "/service-worker.js",
-    "static/css/main.9a51dfd7.chunk.css.map": "/static/css/main.9a51dfd7.chunk.css.map",
-    "static/media/font-awesome.min.css": "/static/media/fontawesome-webfont.fee66e71.woff",
-    "static/media/style.css": "/static/media/sales-and-news__item_4.b11b7687.jpg",
-    "static/media/style-product-card.css": "/static/media/product-catalogue__overlooked-slider-item-5.350013cd.png",
-    "static/media/slider.jpg": "/static/media/slider.d613d452.jpg",
-    "static/media/slider180deg.jpeg": "/static/media/slider180deg.54638011.jpeg"
+    "main.css": "/react-diplom/build/static/css/main.027ac2e1.chunk.css",
+    "main.js": "/react-diplom/build/static/js/main.6e60d887.chunk.js",
+    "main.js.map": "/react-diplom/build/static/js/main.6e60d887.chunk.js.map",
+    "runtime~main.js": "/react-diplom/build/static/js/runtime~main.ba0af062.js",
+    "runtime~main.js.map": "/react-diplom/build/static/js/runtime~main.ba0af062.js.map",
+    "static/js/2.66ba51e3.chunk.js": "/react-diplom/build/static/js/2.66ba51e3.chunk.js",
+    "static/js/2.66ba51e3.chunk.js.map": "/react-diplom/build/static/js/2.66ba51e3.chunk.js.map",
+    "index.html": "/react-diplom/build/index.html",
+    "precache-manifest.e06bdec774942e3070b23c5be5dac5d3.js": "/react-diplom/build/precache-manifest.e06bdec774942e3070b23c5be5dac5d3.js",
+    "service-worker.js": "/react-diplom/build/service-worker.js",
+    "static/css/main.027ac2e1.chunk.css.map": "/react-diplom/build/static/css/main.027ac2e1.chunk.css.map",
+    "static/media/font-awesome.min.css": "/react-diplom/build/static/media/fontawesome-webfont.fee66e71.woff",
+    "static/media/style.css": "/react-diplom/build/static/media/sales-and-news__item_4.b11b7687.jpg",
+    "static/media/style-product-card.css": "/react-diplom/build/static/media/product-catalogue__overlooked-slider-item-5.350013cd.png",
+    "static/media/slider.jpg": "/react-diplom/build/static/media/slider.d613d452.jpg",
+    "static/media/slider180deg.jpeg": "/react-diplom/build/static/media/slider180deg.54638011.jpeg"
   }
 }
