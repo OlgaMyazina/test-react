@@ -1,4 +1,6 @@
 import React from "react";
+import {Switch, Route, Link} from "react-router-dom"
+import Catalog from "../Catalog/Catalog";
 
 /*
 * Поисковый запрос
@@ -14,9 +16,33 @@ GET /products?search=Кэрри
 Поиск работает по товарам целиком, поэтому, если вы будете искать товар по слову красный, то попадут в выдачу товары, у которых цвет красный.
 */
 
-const Search=()=>{
+const Search = ({history, ...rest}) => {
+  const handlerSubmit = (event) => {
+    event.preventDefault();
+    const formField = [], formElement = event.target;
+    Array.from(formElement).forEach(element => {
+      if (!element) return;
+      if (!element.name) return;
+      formField[element.name] = element.value;
+    });
+
+    history.push({
+      pathname: '/catalog',
+      search: `?search=${formField["search"]}`
+    });
+  };
+
   return (
-    <></>
+    <>
+      <form className={`header-main__search ${rest.isSearchActive}`} onSubmit={handlerSubmit}>
+        <i className="fa fa-search" aria-hidden="true"></i>
+        <input placeholder="Поиск" name="search">
+
+        </input>
+      </form>
+
+
+    </>
   )
 };
 

@@ -2,6 +2,7 @@ import React from "react";
 
 import Breadcrumbs from "../Breadcrumbs/Breadcrumbs";
 import Sidebar from "../Sidebar/Sidebar";
+import SidebarComponents from "../SidebarComponent/SidebarComponent";
 import OverlookedSlider from "../OverlookedSlider/OverlookedSlider";
 import Pagination from "../Pagination/Pagination";
 import ProductList from "../ProductList/ProductList";
@@ -14,9 +15,14 @@ export default class Catalog extends React.Component {
         {
           sortBy: 'popularity',
           page: 1,
+          //categoryId: this.props.categoryId === "" ? null : this.props.categoryId,
         }
       ,
     };
+    if (this.props.products) {
+      console.log(this.props.products);
+      this.state = {...this.state, products: this.props.products}
+    }
 
     this.handleSort = this.handleSort.bind(this);
     this.handlePage = this.handlePage.bind(this);
@@ -24,37 +30,90 @@ export default class Catalog extends React.Component {
 
 
   componentDidMount() {
-    if (this.state.filters.length === 0)
+
+    if (this.props.match.params.id === 'featured') {
+      console.log('featured');
+      console.log(this.props);
+    }
+
+    if (this.state.filters.length === 0) {
       this.getProduct(this.props.location.search);
+      return;
+    }
+
+
+    let path = "", url = "";
+    if (this.props.match.params.id === 'featured') {
+      url = 'featured';
+    }
+    for (let filter in this.state.filters) {
+      path += `&${filter}=${this.state.filters[filter]}`;
+    }
+
+    if (this.props.location.search.split('?').length <= 1) {
+      this.getProduct(url, `${this.props.location.search}?${path}`);
+      return;
+    }
+
+    this.getProduct(url, `${this.props.location.search}${path}`);
+  };
+
+  componentDidUpdate(prevProps, prevState) {
+
+    if ((this.state.filters === prevState.filters) &&
+      (this.props.isMainMenuActive === prevProps.isMainMenuActive) &&
+      (this.props.location === prevProps.location)) {
+      return;
+    }
     let path = "";
     for (let filter in this.state.filters) {
       path += `&${filter}=${this.state.filters[filter]}`;
     }
 
-    console.log(`path----------------------->`, path);
-    this.getProduct(`${this.props.location.search}?${path}`);
-  };
-
-  componentDidUpdate(prevProps, prevState){
-    console.log(prevState);
-
-    if (this.state.filters !== prevState.filters) {
-      let path = "";
-      for (let filter in this.state.filters) {
-        path += `&${filter}=${this.state.filters[filter]}`;
-      }
-      console.log(`path--update----------------------->`, path);
-      this.getProduct(`${this.props.location.search}?${path}`);
+    let url = "";
+    if (this.props.match.params.id === 'featured') {
+      url = 'featured';
     }
+    if (this.props.location.search.split('?').length <= 1) {
+      this.getProduct(url, `${this.props.location.search}?${path}`);
+      return;
+    }
+    this.getProduct(url, `${this.props.location.search}${path}`);
   }
 
-  getProduct = (urlPath) => {
-    let url = 'https://api-neto.herokuapp.com/bosa-noga/products';
+  handlerSidebarFilter = (paramArray) => {
+    if (paramArray.length === 0) {
+      return;
+    }
+    const paramObj = {};
+    const value = paramArray.map(element => {
+      return paramObj[element.param] = element.value;
+    });
+
+    this.setState({
+      filters: {...this.state.filters},
+    })
+
+  };
+
+  //todo: взможно, перенести в продукт лист
+  handlerFavoriteClick = (event) => {
+    event.preventDefault();
+    console.log("click favorite", event.target.className);
+    localStorage.setItem('myCat', 'Tom');
+  };
+
+  getProduct = (url, urlPath) => {
+    console.log(`get products`)
+    console.log(url, urlPath);
+    let newUrl = 'https://api-neto.herokuapp.com/bosa-noga/';
+    newUrl += url ? url : 'products';
+
     if (urlPath) {
-      url += urlPath;
+      newUrl += urlPath;
     }
 
-    console.log(url);
+    console.log(newUrl);
     console.log(urlPath);
 
     const params = {
@@ -63,7 +122,7 @@ export default class Catalog extends React.Component {
         'Content-Type': 'application/json'
       })
     };
-    return fetch(url, params)
+    return fetch(newUrl, params)
       .then(response => response.json())
       .then(result => {
         this.setState({products: result})
@@ -77,12 +136,11 @@ export default class Catalog extends React.Component {
         sortBy: event.target.value
       }
     });
-    this.getProduct(`sortBy=${this.state.filters.sortBy}`);
+    this.getProduct('', `sortBy=${this.state.filters.sortBy}`);
   };
 
   handlePage = (event) => {
     event.preventDefault();
-    console.log('handlePage---else', event.currentTarget, event.target);
 
     if (event.target.getAttribute("name") == "forward") {
       this.setState({
@@ -114,6 +172,13 @@ export default class Catalog extends React.Component {
     }
   };
 
+  getHeader = () => {
+    if (this.props.location.search.includes("search")) {
+      return "Результаты поиска";
+    }
+    return this.props.isMainMenuActive;
+  };
+
   render() {
     console.log(`props Catalog`, this.props, this.props.match);
 
@@ -121,18 +186,18 @@ export default class Catalog extends React.Component {
       <>
         {/*<!-- Каталог товаров -->*/}
         {/*<!-- Breadcrumbs -->*/}
-        <Breadcrumbs item={this.props.isMainMenuActive}/>
+        <Breadcrumbs item={this.props.isMainMenuActive}{...this.props}/>
         {/*<!-- Тело каталога с сайдбаром -->*/}
         <main className="product-catalogue">
           {/*<!-- Сайдбар -->*/}
-          <Sidebar/>
+          <SidebarComponents {...this.state} {...this.props}/>
           {/*<!-- Основной контент каталога -->*/}
           <section className="product-catalogue-content">
             {/*<!-- Голова каталога с названием раздела и сортировкой -->*/}
             <section className="product-catalogue__head">
               <div className="product-catalogue__section-title">
-                <h2 className="section-name">{this.props.isMainMenuActive}</h2>
-                <span className="amount">{this.state.goods}</span>
+                <h2 className="section-name">{this.getHeader()}</h2>
+                <span className="amount">{`${this.state.products ? this.state.products.goods : ""} товаров`}</span>
               </div>
               <div className="product-catalogue__sort-by">
                 <p className="sort-by">Сортировать</p>
@@ -144,7 +209,10 @@ export default class Catalog extends React.Component {
             </section>
             {/*<!-- Список товаров каталога -->*/}
             {/*<!-- Товары -->*/}
-            <ProductList products={this.state.products}/>
+            <section className="product-catalogue__item-list">
+
+            <ProductList products={this.state.products ? this.state.products.data : []}/>
+            </section>
 
 
             {/*<!-- Пагинация под каталогом -->*/}

@@ -5,9 +5,7 @@ import Catalog from "../Catalog/Catalog";
 
 const SubCategory = (props) => {
 
-  const {filters, categoryName, ...rest} = props;
-
-  console.log('subCategory', categoryName, rest, rest.match);
+  const {filters, categoryName, categoryId, onClick, ...rest} = props;
 
   if (!filters.data) {
     return (<div> Loading filters... </div>)
@@ -24,9 +22,14 @@ const SubCategory = (props) => {
     return countRow;
   };
 
+  const getCategory = () => {
+    console.log(`subCategory`, categoryId);
+    return categoryId ? `categoryId=${categoryId}&` : "";
+  };
+
   return (
     <>
-      <div className="wrapper" onClick={rest.onClick}>
+      <div className="wrapper" onClick={onClick}>
         <div className="dropped-menu__lists dropped-menu__lists_women">
           <h3 className="dropped-menu__list-title">Повод:</h3>
           <ul className="dropped-menu__list">
@@ -34,7 +37,8 @@ const SubCategory = (props) => {
               filters.data.reason.map(reasonItem => {
                 return (
                   <li className="dropped-menu__item" key={reasonItem}>
-                    <Link to="">{reasonItem}</Link>
+                    <Link
+                      to={{pathname: '/catalog', search: `?${getCategory()}reason=${reasonItem}`}}>{reasonItem}</Link>
                   </li>
                 )
               })
@@ -49,7 +53,7 @@ const SubCategory = (props) => {
               filters.data.type.map(typeItem => {
                 return (
                   <li className="dropped-menu__item" key={typeItem}>
-                    <Link to="">{typeItem}</Link>
+                    <Link to={{pathname: '/catalog', search: `?${getCategory()}type=${typeItem}`}}>{typeItem}</Link>
                   </li>
                 )
               })
@@ -64,7 +68,8 @@ const SubCategory = (props) => {
               filters.data.season.map(seasonItem => {
                 return (
                   <li className="dropped-menu__item" key={seasonItem}>
-                    <a href="#">{seasonItem}</a>
+                    <Link
+                      to={{pathname: '/catalog', search: `?${getCategory()}season=${seasonItem}`}}>{seasonItem}</Link>
                   </li>
                 )
               })
@@ -83,7 +88,7 @@ const SubCategory = (props) => {
                 return (
                   <li className="dropped-menu__item" key={brandItem}>
                     <Link
-                      to={{pathname: '/catalog', search: `?brand=${brandItem}`}}>
+                      to={{pathname: '/catalog', search: `?${getCategory()}brand=${brandItem}`}}>
                       {brandItem}
                     </Link>
                   </li>
