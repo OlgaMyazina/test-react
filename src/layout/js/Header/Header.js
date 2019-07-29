@@ -3,6 +3,7 @@ import {Link} from "react-router-dom";
 
 import CategoriesComponent from "../CategoriesComponent/CategoriesComponent";
 import SubCategoryComponent from "../SubCategoryComponent/SubCategoryComponent";
+import Search from "../Search/Search";
 
 import logo from '../../img/header-logo.png';
 import productListPic1 from '../../img/product-list__pic_1.jpg';
@@ -17,6 +18,8 @@ export default class Header extends React.Component {
       isHiddenPanel: "",
       isSearchActive: "",
 
+      isSubCategoryVisible: false,
+
       categoryId: "",
     };
     this.headerHiddenPanelProfileVisibility = this.headerHiddenPanelProfileVisibility.bind(this);
@@ -25,6 +28,18 @@ export default class Header extends React.Component {
 
   }
 
+  componentDidMount() {
+
+  }
+
+  componentDidUpdate(prevProps, prevState, snapshot) {
+    if (this.state.isSubCategoryVisible && (this.props.location.search !== prevProps.location.search)) {
+      this.setState({
+        isSubCategoryVisible: false
+      })
+    }
+
+  }
 
   //todo: добавить сам класс
   isBasketActive = (value) => {
@@ -87,16 +102,21 @@ export default class Header extends React.Component {
   };
 
   isDroppedMenuVisible = () => {
-    return this.props.isDroppedVisible ? "dropped-menu_visible" : "";
+    return this.state.isSubCategoryVisible ? "dropped-menu_visible" : "";
   };
 
   isMenuItemActive = (value) => {
     return (value === this.props.isMainMenuActive) ? "main-menu__item_active" : "";
   };
 
-
-
-
+  handlerCategory = (event) => {
+    event.preventDefault();
+    console.log(`handlerCategory`, event.target);
+    this.setState({
+      isSubCategoryVisible: !this.state.isSubCategoryVisible,
+      categoryId: event.target.getAttribute("data-category-id") ? event.target.getAttribute("data-category-id") : "",
+    })
+  };
 
 
   render() {
@@ -114,7 +134,7 @@ export default class Header extends React.Component {
                   <a href="#">Доставка и оплата</a>
                 </li>
                 <li className="top-menu__item">
-                  <a href="#">О магазине</a>
+                  <Link to="/about">О магазине</Link>
                 </li>
                 <li className="top-menu__item">
                   <a href="#">Контакты</a>
@@ -146,34 +166,29 @@ export default class Header extends React.Component {
                        onClick={this.headerMainSearchVisibility}>
 
                   </div>
-                  <div className="header-main__pic_border"></div>
+                  <div className="header-main__pic_border"/>
                   <div className="header-main__pic header-main__pic_profile"
                        onClick={this.headerHiddenPanelProfileVisibility}>
-                    <div className={`header-main__pic_profile_menu ${this.isProfileActive()}`}></div>
+                    <div className={`header-main__pic_profile_menu ${this.isProfileActive()}`}/>
                   </div>
-                  <div className="header-main__pic_border"></div>
+                  <div className="header-main__pic_border"/>
                   <div className="header-main__pic header-main__pic_basket"
                        onClick={this.headerHiddenPanelBasketVisibility}>
                     <div className="header-main__pic_basket_full">1</div>
-                    <div className={`header-main__pic_basket_menu ${this.isBasketActive()}`}></div>
+                    <div className={`header-main__pic_basket_menu ${this.isBasketActive()}`}/>
                   </div>
                 </div>
-                <form className={`header-main__search ${this.isSearchActive()}`} action="#">
-                  <i className="fa fa-search" aria-hidden="true"></i>
-                  <input placeholder="Поиск">
-
-                  </input>
-                </form>
+                <Search isSearchActive={this.isSearchActive()} {...this.props}/>
               </div>
 
             </div>
             <div className={`header-main__hidden-panel hidden-panel ${this.isPanelVisible()}`}>
               <div className="wrapper">
                 {/*todo: некорректна работа isProfileVisible*/}
-                <div className={`hidden-panel__profile ${this.isProfileVisible}`}>
+                <div className={`hidden-panel__profile ${this.isProfileVisible()}`}>
                   <a href="#">Личный кабинет</a>
-                  <a href="favorite.html">
-                    <i className="fa fa-heart-o" aria-hidden="true"></i>Избранное</a>
+                  <Link to="/favorite">
+                    <i className="fa fa-heart-o" aria-hidden="true"/>Избранное</Link>
                   <a href="#">Выйти</a>
                 </div>
                 <div className={`hidden-panel__basket basket-dropped ${this.isBasketVisible()}`}>
@@ -183,12 +198,12 @@ export default class Header extends React.Component {
                       <a className="product-list__pic">
                         <img src={productListPic1} alt="product"/> </a>
                       <a href="#" className="product-list__product">Ботинки женские, Baldinini</a>
-                      <div className="product-list__fill"></div>
+                      <div className="product-list__fill"/>
                       <div className="product-list__price">12 360
-                        <i className="fa fa-rub" aria-hidden="true"></i>
+                        <i className="fa fa-rub" aria-hidden="true"/>
                       </div>
                       <div className="product-list__delete">
-                        <i className="fa fa-times" aria-hidden="true"></i>
+                        <i className="fa fa-times" aria-hidden="true"/>
                       </div>
                     </div>
 
@@ -196,36 +211,36 @@ export default class Header extends React.Component {
                       <a className="product-list__pic">
                         <img src={productListPic1} alt="product"/> </a>
                       <a href="#" className="product-list__product">Ботинки женские, Baldinini</a>
-                      <div className="product-list__fill"></div>
+                      <div className="product-list__fill"/>
                       <div className="product-list__price">12 360
-                        <i className="fa fa-rub" aria-hidden="true"></i>
+                        <i className="fa fa-rub" aria-hidden="true"/>
                       </div>
                       <div className="product-list__delete">
-                        <i className="fa fa-times" aria-hidden="true"></i>
+                        <i className="fa fa-times" aria-hidden="true"/>
                       </div>
                     </div>
                     <div className="product-list__item">
                       <a className="product-list__pic">
                         <img src={productListPic1} alt="product"/> </a>
                       <a href="#" className="product-list__product">Ботинки женские, Baldinini</a>
-                      <div className="product-list__fill"></div>
+                      <div className="product-list__fill"/>
                       <div className="product-list__price">12 360
-                        <i className="fa fa-rub" aria-hidden="true"></i>
+                        <i className="fa fa-rub" aria-hidden="true"/>
                       </div>
                       <div className="product-list__delete">
-                        <i className="fa fa-times" aria-hidden="true"></i>
+                        <i className="fa fa-times" aria-hidden="true"/>
                       </div>
                     </div>
                     <div className="product-list__item">
                       <a className="product-list__pic">
                         <img src={productListPic1} alt="product"/> </a>
                       <a href="#" className="product-list__product">Ботинки женские, Baldinini</a>
-                      <div className="product-list__fill"></div>
+                      <div className="product-list__fill"/>
                       <div className="product-list__price">12 360
-                        <i className="fa fa-rub" aria-hidden="true"></i>
+                        <i className="fa fa-rub" aria-hidden="true"/>
                       </div>
                       <div className="product-list__delete">
-                        <i className="fa fa-times" aria-hidden="true"></i>
+                        <i className="fa fa-times" aria-hidden="true"/>
                       </div>
                     </div>
 
@@ -237,7 +252,10 @@ export default class Header extends React.Component {
           </div>
 
           <nav className="main-menu">
-            <CategoriesComponent onClick={this.props.mainSubmenuVisibility} isMenuItemActive={this.isMenuItemActive}/>
+
+            <CategoriesComponent onClick={this.handlerCategory}
+                                 isMenuItemActive={this.isMenuItemActive}
+                                 location={this.props.location}/>
           </nav>
 
           <div className={`dropped-menu ${this.isDroppedMenuVisible()}`}>
@@ -247,8 +265,10 @@ export default class Header extends React.Component {
             {/*Сезон*/}
 
             {/*Brand*/}
-            {console.log(this.state, this.props)}
-            <SubCategoryComponent categoryName={this.props.isMainMenuActive} onClick={this.props.subMenuClick}/>
+            {console.log(`header`, this.state, this.props)}
+            <SubCategoryComponent categoryName={this.props.isMainMenuActive}
+                                  onClick={this.props.subMenuClick}
+                                  categoryId={this.state.categoryId}/>
 
           </div>
         </header>

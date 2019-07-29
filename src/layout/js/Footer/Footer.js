@@ -1,28 +1,16 @@
 import React from "react";
+import Subscrible from "../Subscrible/Subscrible";
 
-const Footer=()=>{
+const Footer = () => {
   return (
-    <footer className="footer">
+    <footer className="footer" style={{
+      position: "absolute",
+      bottom: "0",
+      width: "100%",
+      marginBottom: "-350px"
+    }}>
       <section className="subscribe">
-        <div className="subscribe__wrapper">
-          <h2 className="subscribe__title">подписаться на рассылку выгодных предложений</h2>
-          <form className="subscribe__radios" action="">
-            <label className="subscribe__radio_label">
-              <input className="subscribe__radio" type="radio" name="subscribe" value="women"/>
-              <div className="subscribe__radio_text">Женское</div>
-            </label>
-            <label className="subscribe__radio_label">
-              <input className="subscribe__radio" type="radio" name="subscribe" value="men"/>
-              <div className="subscribe__radio_text">Мужское</div>
-            </label>
-            <label className="subscribe__radio_label">
-              <input className="subscribe__radio" type="radio" name="subscribe" value="both" checked=""/>
-              <div className="subscribe__radio_text">Всё</div>
-            </label>
-            <input className="subscribe__email" type="email" placeholder="Ваш e-mail"/>
-            <input className="subscribe__submit" type="submit" value="ПОДПИСАТЬСЯ"/>
-          </form>
-        </div>
+        <Subscrible/>
       </section>
       <div className="footer__bottom">
         <div className="wrapper">
@@ -52,17 +40,17 @@ const Footer=()=>{
           <div className="footer__info">
             <h3 className="footer__info_title">Принимаем к оплате:</h3>
             <div className="footer__paid-systems">
-              <div className="footer__paid footer__paid_paypal"></div>
-              <div className="footer__paid footer__paid_master-card"></div>
-              <div className="footer__paid footer__paid_visa"></div>
-              <div className="footer__paid footer__paid_yandex"></div>
-              <div className="footer__paid footer__paid_webmoney"></div>
-              <div className="footer__paid footer__paid_qiwi"></div>
+              <div className="footer__paid footer__paid_paypal"/>
+              <div className="footer__paid footer__paid_master-card"/>
+              <div className="footer__paid footer__paid_visa"/>
+              <div className="footer__paid footer__paid_yandex"/>
+              <div className="footer__paid footer__paid_webmoney"/>
+              <div className="footer__paid footer__paid_qiwi"/>
             </div>
             <div className="footer__social-links">
               <h3 className="footer__social-links_title">Мы в соц.сетях:</h3>
-              <div className="footer__social-link footer__social-link_twitter"></div>
-              <div className="footer__social-link footer__social-link_vk"></div>
+              <div className="footer__social-link footer__social-link_twitter"/>
+              <div className="footer__social-link footer__social-link_vk"/>
             </div>
             <div className="footer__copyright">2009-2018 © BosaNoga.ru — модный интернет-магазин обуви<br/> и
               аксессуаров. Все права защищены. Доставка по всей России!
