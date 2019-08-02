@@ -15,9 +15,22 @@ const styleComponent = {
   width: '100%',
 };
 
-const ProductList = (props) => {
+export default class ProductList extends React.Component {
+  constructor(props) {
+    super(props);
+  }
 
-  const handlerFavoriteClick = (product, event) => {
+  componentDidMount() {
+    this.props.products.map(product => this.getProduct(product.id))
+  }
+
+  componentDidUpdate(prevProps, prevState, snapshot) {
+    if (prevProps.products !== this.props.products) {
+      this.props.products.map(product => this.getProduct(product.id))
+    }
+  }
+
+  handlerFavoriteClick = (product, event) => {
     event.preventDefault();
     //получаем значения из хранилица
     const returnObj = JSON.parse(localStorage.getItem("products"));
@@ -43,43 +56,62 @@ const ProductList = (props) => {
     }
   };
 
+  getProduct = (id) => {
+    const params = {
+      method: 'GET',
+      headers: new Headers({
+        'Content-Type': 'application/json'
+      })
+    };
+    const url = `https://api-neto.herokuapp.com/bosa-noga/products/${id}`;
+    return fetch(url, params)
+      .then(response => response.json())
+      .then(result => {
+        console.log(result);
+        console.log(this.state);
+        return this.setState({[id]: result.data.sizes.map(elem => elem.available ? elem.size : "").join(", ")})
+      });
+  };
 
-  const {products, ...rest} = props;
-  console.log('productList', products, rest);
-  if (!products) return (<></>);
-  return (
-    <>
+  render() {
 
-      {products.map((product, index) => {
-        return (
-          <Link to={`product/${product.id}`} className="item-list__item-card item" key={product.id}>
-            <div className="item-pic">
-              <img className={`item-pic-${index + 1}`}
-                   src={product.images[0]}
-                   alt={product.title}
-                   style={styleComponent}/>
-              <div className="product-catalogue__product_favorite"
-                   onClick={(event) => handlerFavoriteClick(product, event)}>
-                <p/>
+
+    if (!this.props.products) return (<></>);
+    return (
+      <>
+
+        {this.props.products.map((product, index) => {
+          return (
+            <Link to={`product/${product.id}`} className="item-list__item-card item" key={product.id}>
+              <div className="item-pic">
+                <img className={`item-pic-${index + 1}`}
+                     src={product.images[0]}
+                     alt={product.title}
+                     style={styleComponent}/>
+                <div className="product-catalogue__product_favorite"
+                     onClick={(event) => this.handlerFavoriteClick(product, event)}>
+                  <p/>
+                </div>
+                <div className="arrow arrow_left"/>
+                <div className="arrow arrow_right"/>
               </div>
-              <div className="arrow arrow_left"/>
-              <div className="arrow arrow_right"/>
-            </div>
-            <div className="item-desc">
-              <h4 className="item-name">{product.title}</h4>
-              <p className="item-producer">Производитель: <span className="producer">{product.brand}</span></p>
-              <p className="item-price">{product.price}</p>
-              <div className="sizes">
-                <p className="sizes__title">Размеры в наличии:</p>
-                <p className="sizes__avalible">36, 37, 38, 39, 40, 41, 42</p>
+              <div className="item-desc">
+                <h4 className="item-name">{product.title}</h4>
+                <p className="item-producer">Производитель: <span className="producer">{product.brand}</span></p>
+                <p className="item-price">{product.price}</p>
+                <div className="sizes">
+                  <p className="sizes__title">Размеры в наличии:</p>
+                  <p className="sizes__avalible">
+                    {console.log('state', this.state)}
+                    {this.state ? this.state[product.id] : "нет данных"}</p>
+                </div>
               </div>
-            </div>
-          </Link>
-        )
-      })}
+            </Link>
+          )
+        })}
 
-    </>
-  )
-};
-
-export default ProductList;
+      </>
+    )
+  }
+}
+;
