@@ -18,18 +18,18 @@ const App = () => {
       <HeaderComponent/>
 
       <Switch>
-        <Route exact path='/' component={Home}/>
+        <Route exact path={process.env.PUBLIC_URL + '/'} component={Home}/>
         {/*<Route path='/cart' component={Cart}/>*/}
-        <Route path='/product/:id?' render={(props) => (
+        <Route path={process.env.PUBLIC_URL + '/product/:id?'} render={(props) => (
           <Product {...props}/>
         )}/>
-        <Route path="/catalog/:id?" render={(props) => (
+        <Route path={process.env.PUBLIC_URL + '/catalog/:id?'} render={(props) => (
           <Catalog {...props} />
         )}/>
-        <Route path="/productlist" component={ProductList}/>
-        <Route path="/order" component={Order}/>
-        <Route path="/favorite" component={Favorite}/>
-        <Route path="/about" component={About}/>
+        <Route path={process.env.PUBLIC_URL + '/productlist'} component={ProductList}/>
+        <Route path={process.env.PUBLIC_URL + '/order'} component={Order}/>
+        <Route path={process.env.PUBLIC_URL + '/favorite'} component={Favorite}/>
+        <Route path={process.env.PUBLIC_URL + '/about'} component={About}/>
 
       </Switch>
       <Footer/>

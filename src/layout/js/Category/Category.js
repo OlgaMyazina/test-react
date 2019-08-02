@@ -46,7 +46,7 @@ export default class Category extends React.Component {
         <div className="wrapper">
           <ul className="main-menu__items">
             <li className={`main-menu__item main-menu__item_sales ${this.isCategoryActive("Акции")}`}>
-              <Link to="/" data-category-id="">Акции</Link>
+              <Link to={process.env.PUBLIC_URL + "/"} data-category-id="">Акции</Link>
             </li>
             {console.log(`render category`, this.props)}
             {(this.props.category.data) && (this.props.category.data.map(dataItem => {
@@ -62,11 +62,11 @@ export default class Category extends React.Component {
             }
 
             <li className={`main-menu__item main-menu__item_brands ${this.isCategoryActive("Бренды")}`}>
-              <Link to="/catalog" data-category-id="">Бренды</Link>
+              <Link to={process.env.PUBLIC_URL + "/catalog"} data-category-id="">Бренды</Link>
             </li>
 
             <li className={`main-menu__item main-menu__item_new ${this.isCategoryActive("Новинки")}`}>
-              <Link to="/catalog/featured" data-category-id="">Новинки</Link>
+              <Link to={process.env.PUBLIC_URL + "/catalog/featured"} data-category-id="">Новинки</Link>
             </li>
           </ul>
         </div>
