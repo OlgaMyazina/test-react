@@ -192,7 +192,7 @@ export default class Product extends React.Component {
                     <tr>
                       <td className="left-col">Производитель:</td>
                       <td className="right-col">
-                        <Link to={`${process.env.PUBLIC_URL}/catalog?brand=${this.state.product.brand}`}>
+                        <Link to={`/catalog?brand=${this.state.product.brand}`}>
                           <span className="producer">{this.state.product.brand}</span>
                         </Link>
                       </td>
