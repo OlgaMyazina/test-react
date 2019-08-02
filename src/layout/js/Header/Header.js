@@ -152,7 +152,7 @@ export default class Header extends React.Component {
                 <p>Ежедневно: с 09-00 до 21-00</p>
               </div>
               <div className="header-main__logo">
-                <Link to='/'>
+                <Link to="/">
 
                   <h1>
                     <img src={logo} alt="logotype"/>
@@ -245,7 +245,9 @@ export default class Header extends React.Component {
                     </div>
 
                   </div>
-                  <Link className="basket-dropped__order-button" to="/order">Оформить заказ</Link>
+                  <Link className="basket-dropped__order-button" to="/order">
+                    Оформить заказ
+                  </Link>
                 </div>
               </div>
             </div>
