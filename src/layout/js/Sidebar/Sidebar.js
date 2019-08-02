@@ -179,6 +179,25 @@ export default class Sidebar extends React.Component {
     return categoryId ? `catalog/products?categoryId=${categoryId}` : "/catalog";
   };
 
+  handlerSearchBrand = (event) => {
+    event.preventDefault();
+    const formField = [], formElement = event.target;
+    Array.from(formElement).forEach(element => {
+      if (!element) return;
+      if (!element.name) return;
+      formField[element.name] = element.value;
+    });
+    console.log("searchBrand formElement", formElement);
+    console.log("searchBrand formField", formField);
+    console.log("searchBrand", this.props);
+
+
+    this.props.history.push({
+      pathname: '/catalog',
+      search: `${this.props.location.search}&brand=${formField["searchBrand"]}`
+    });
+  };
+
   render() {
     if (!this.props.data.data) {
       return (<></>);
@@ -379,8 +398,8 @@ export default class Sidebar extends React.Component {
         <section className="sidebar__division">
           <div className="sidebar__brand">
             <h3> Бренд </h3>
-            <form action="post" className="brand-search">
-              <input type="search" className="brand-search" id="brand-search" placeholder="Поиск"/>
+            <form className="brand-search" onSubmit={this.handlerSearchBrand}>
+              <input type="search" name="searchBrand" className="brand-search" id="brand-search" placeholder="Поиск"/>
               <input type="submit" name="" value="" className="submit"/>
             </form>
           </div>

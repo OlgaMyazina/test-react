@@ -23,6 +23,15 @@ export default class Category extends React.Component {
   isCategoryActive = (itemName, itemId) => {
     const filter = urlToFilters(this.props.location.search);
 
+    console.log('isCategoryActive, itemName', itemName);
+    console.log('isCategoryActive, itemId', itemId);
+    console.log('isCategoryActive, filter', filter);
+
+    if (filter.search){
+      return;
+    }
+
+
     if (this.props.location.pathname === '/catalog') {
       if (!filter.categoryId) {
         return itemName === "Бренды" ? "main-menu__item_active" : "";

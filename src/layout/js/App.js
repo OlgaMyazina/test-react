@@ -1,4 +1,4 @@
-import React from "react";
+import React, { Component} from "react";
 import {BrowserRouter, Switch, Route} from 'react-router-dom';
 
 import HeaderComponent from "./HeaderComponent/HeaderComponent";
@@ -12,31 +12,55 @@ import Favorite from "./Favorite/Favorite";
 import About from "./About/About";
 //import ProductComponent from "./ProductComponent/ProductComponent";
 
-const App = () => {
-  console.log(`public url`, process.env.PUBLIC_URL);
-  return (
-    <BrowserRouter basename={process.env.PUBLIC_URL}>
-      <HeaderComponent/>
+export const CategoriesContext = React.createContext({
+  categories:[]
+  }
+);
 
-      <Switch>
-        <Route exact path="/" component={Home}/>
-        {/*<Route path='/cart' component={Cart}/>*/}
-        <Route path="/product/:id?" render={(props) => (
-          <Product {...props}/>
-        )}/>
-        <Route path="/catalog/:id?" render={(props) => (
-          <Catalog {...props} />
-        )}/>
-        <Route path="/productlist" component={ProductList}/>
-        <Route path="/order" component={Order}/>
-        <Route path="/favorite" component={Favorite}/>
-        <Route path="/about" component={About}/>
+export default class App extends Component {
+  constructor(props) {
+    super(props);
+  }
 
-      </Switch>
-      <Footer/>
-    </BrowserRouter>
-  )
+  componentDidMount() {
+    const url = "https://api-neto.herokuapp.com/bosa-noga/categories";
+    const params = {
+      method: 'GET',
+      headers: new Headers({
+        'Content-Type': 'application/json'
+      })
+    };
+    fetch(url, params)
+      .then(response => response.json())
+      .then(result => this.setState({categories: result}));
+  }
+
+  render() {
+    return (
+      <BrowserRouter basename={process.env.PUBLIC_URL}>
+        <CategoriesContext.Provider value={this.state}>
+          <HeaderComponent/>
+
+          <Switch>
+            <Route exact path="/" component={Home}/>
+            {/*<Route path='/cart' component={Cart}/>*/}
+            <Route path="/product/:id?" render={(props) => (
+              <Product {...props}/>
+            )}/>
+            <Route path="/catalog/:id?" render={(props) => (
+              <Catalog {...props} />
+            )}/>
+            <Route path="/productlist" component={ProductList}/>
+            <Route path="/order" component={Order}/>
+            <Route path="/favorite" component={Favorite}/>
+            <Route path="/about" component={About}/>
+
+          </Switch>
+          <Footer/>
+        </CategoriesContext.Provider>
+      </BrowserRouter>
+    )
+  }
 }
-export default App;
 
 

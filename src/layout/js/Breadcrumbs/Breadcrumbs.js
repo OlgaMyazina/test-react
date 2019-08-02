@@ -1,26 +1,31 @@
 import React from "react";
 import {Link} from "react-router-dom";
 
-const Breadcrumbs = ({match, ...rest}) => {
+import filtersToUrl from "../filters/filtersToUrl";
+import urlToFilters from "../filters/urlToFilters";
+
+const Breadcrumbs = ({match, location, ...rest}) => {
   console.log(`props BreadCrums`, match, rest);
 
   const getLink = () => {
     const result = [];
 
     console.log(`breadcrumbs`, match, rest);
+    const filters = urlToFilters(location.search);
+    console.log('breadcrums filters', filters);
 
-    if (rest.location.pathname.includes("favorite")){
+    if (location.pathname.includes("favorite")) {
       result.push({
-          link: `${rest.location.pathname}${rest.location.search}`,
+          link: `${location.pathname}${location.search}`,
           value: "Избранное",
         }
       );
       return result;
     }
 
-    if (rest.location.search.includes("search")) {
+    if (location.search.includes("search")) {
       result.push({
-          link: `${rest.location.pathname}${rest.location.search}`,
+          link: `${location.pathname}${location.search}`,
           value: "Результаты поиска",
         }
       );
@@ -28,24 +33,25 @@ const Breadcrumbs = ({match, ...rest}) => {
     }
 
 
-
-    if (rest.categoryId) {
+    if ((filters.categoryId)&&(rest.categories)) {
       result.push({
-          link: `${rest.location.pathname}?categoryId=${rest.categoryId}`,
-          value: rest.item,
+          link: `${location.pathname}?categoryId=${filters.categoryId}`,
+          value: rest.categories.categories.data.find(element=>{return element.id ==filters.categoryId}).title,
         }
       )
     }
 
-    if (rest.location.search.includes("type")) {
-      const element = getParam(rest.location.search, "type");
+    if (filters.type) {
+      const element = getParam(location.search, "type");
       result.push({
-        link: `${rest.location.pathname}${rest.location.search}`,
+        link: `${location.pathname}${location.search}`,
         value: element ? element.value : "",
       });
     }
+    console.log(`result breadcrums`,result);
     return result;
   };
+
 
   const parseQueryString = (url) => {
     const paramString = url.substring(1),
