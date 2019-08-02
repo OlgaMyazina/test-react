@@ -134,7 +134,7 @@ export default class Header extends React.Component {
                   <a href="#">Доставка и оплата</a>
                 </li>
                 <li className="top-menu__item">
-                  <Link to="/about">О магазине</Link>
+                  <Link to={process.env.PUBLIC_URL + "/about"}>О магазине</Link>
                 </li>
                 <li className="top-menu__item">
                   <a href="#">Контакты</a>
@@ -152,7 +152,7 @@ export default class Header extends React.Component {
                 <p>Ежедневно: с 09-00 до 21-00</p>
               </div>
               <div className="header-main__logo">
-                <Link to='/'>
+                <Link to={process.env.PUBLIC_URL + '/'}>
 
                   <h1>
                     <img src={logo} alt="logotype"/>
@@ -187,7 +187,7 @@ export default class Header extends React.Component {
                 {/*todo: некорректна работа isProfileVisible*/}
                 <div className={`hidden-panel__profile ${this.isProfileVisible()}`}>
                   <a href="#">Личный кабинет</a>
-                  <Link to="/favorite">
+                  <Link to={process.env.PUBLIC_URL + "/favorite"}>
                     <i className="fa fa-heart-o" aria-hidden="true"/>Избранное</Link>
                   <a href="#">Выйти</a>
                 </div>
@@ -245,7 +245,9 @@ export default class Header extends React.Component {
                     </div>
 
                   </div>
-                  <Link className="basket-dropped__order-button" to="/order">Оформить заказ</Link>
+                  <Link className="basket-dropped__order-button" to={process.env.PUBLIC_URL + "/order"}>
+                    Оформить заказ
+                  </Link>
                 </div>
               </div>
             </div>
