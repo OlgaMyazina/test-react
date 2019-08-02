@@ -13,14 +13,15 @@ import About from "./About/About";
 //import ProductComponent from "./ProductComponent/ProductComponent";
 
 const App = () => {
+  console.log(`public url`, process.env.PUBLIC_URL);
   return (
     <BrowserRouter basename={process.env.PUBLIC_URL}>
       <HeaderComponent/>
 
       <Switch>
-        <Route exact path='/' component={Home}/>
+        <Route exact path="/" component={Home}/>
         {/*<Route path='/cart' component={Cart}/>*/}
-        <Route path='/product/:id?' render={(props) => (
+        <Route path="/product/:id?" render={(props) => (
           <Product {...props}/>
         )}/>
         <Route path="/catalog/:id?" render={(props) => (
