@@ -13,6 +13,7 @@ import About from "./About/About";
 //import ProductComponent from "./ProductComponent/ProductComponent";
 
 const App = () => {
+  console.log(`public url`, process.env.PUBLIC_URL);
   return (
     <BrowserRouter basename={process.env.PUBLIC_URL}>
       <HeaderComponent/>
