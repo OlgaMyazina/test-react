@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="b8c7c27a-9395-4a5d-9fee-fd55b813bb89" name="Default Changelist" comment="" />
+    <list default="true" id="b8c7c27a-9395-4a5d-9fee-fd55b813bb89" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
+    </list>
     <ignored path="$PROJECT_DIR$/.tmp/" />
     <ignored path="$PROJECT_DIR$/temp/" />
     <ignored path="$PROJECT_DIR$/tmp/" />
@@ -17,7 +19,7 @@
         <entry file="file://$PROJECT_DIR$/package.json">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="556">
-              <caret line="32" column="64" selection-start-line="32" selection-start-column="64" selection-end-line="32" selection-end-column="64" />
+              <caret line="32" column="51" selection-start-line="32" selection-start-column="51" selection-end-line="32" selection-end-column="51" />
             </state>
           </provider>
         </entry>
@@ -55,8 +57,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/layout/js/Header/Header.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="2215">
-              <caret line="248" column="29" selection-start-line="248" selection-start-column="29" selection-end-line="248" selection-end-column="29" />
+            <state relative-caret-position="486">
+              <caret line="154" column="48" selection-start-line="154" selection-start-column="38" selection-end-line="154" selection-end-column="48" />
               <folding>
                 <element signature="e#0#26#0" expanded="true" />
               </folding>
@@ -67,8 +69,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/layout/js/App.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="589">
-              <caret line="31" column="55" selection-start-line="31" selection-start-column="55" selection-end-line="31" selection-end-column="55" />
+            <state relative-caret-position="285">
+              <caret line="15" column="52" selection-start-line="15" selection-start-column="52" selection-end-line="15" selection-end-column="52" />
               <folding>
                 <element signature="e#0#26#0" expanded="true" />
               </folding>
@@ -217,11 +219,11 @@
         <option value="$PROJECT_DIR$/src/layout/js/Sidebar/Sidebar.js" />
         <option value="$PROJECT_DIR$/build/index.html" />
         <option value="$PROJECT_DIR$/.gitignore" />
-        <option value="$PROJECT_DIR$/package.json" />
-        <option value="$PROJECT_DIR$/src/layout/js/App.js" />
         <option value="$PROJECT_DIR$/src/layout/js/Header/Header.js" />
         <option value="$PROJECT_DIR$/src/layout/js/Product/Product.js" />
         <option value="$PROJECT_DIR$/src/layout/js/Category/Category.js" />
+        <option value="$PROJECT_DIR$/src/layout/js/App.js" />
+        <option value="$PROJECT_DIR$/package.json" />
       </list>
     </option>
   </component>
@@ -332,7 +334,7 @@
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="82278000" />
+    <option name="totallyTimeSpent" value="82471000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="0" width="2048" height="1152" extended-state="0" />
@@ -718,16 +720,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/layout/js/App.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="589">
-          <caret line="31" column="55" selection-start-line="31" selection-start-column="55" selection-end-line="31" selection-end-column="55" />
-          <folding>
-            <element signature="e#0#26#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/layout/js/NewProducts/NewPropducts.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="57">
@@ -778,8 +770,18 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/layout/js/Header/Header.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2215">
-          <caret line="248" column="29" selection-start-line="248" selection-start-column="29" selection-end-line="248" selection-end-column="29" />
+        <state relative-caret-position="486">
+          <caret line="154" column="48" selection-start-line="154" selection-start-column="38" selection-end-line="154" selection-end-column="48" />
+          <folding>
+            <element signature="e#0#26#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/layout/js/App.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="285">
+          <caret line="15" column="52" selection-start-line="15" selection-start-column="52" selection-end-line="15" selection-end-column="52" />
           <folding>
             <element signature="e#0#26#0" expanded="true" />
           </folding>
@@ -789,7 +791,7 @@
     <entry file="file://$PROJECT_DIR$/package.json">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="556">
-          <caret line="32" column="64" selection-start-line="32" selection-start-column="64" selection-end-line="32" selection-end-column="64" />
+          <caret line="32" column="51" selection-start-line="32" selection-start-column="51" selection-end-line="32" selection-end-column="51" />
         </state>
       </provider>
     </entry>
