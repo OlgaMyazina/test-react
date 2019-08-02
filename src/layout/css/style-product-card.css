@@ -85,8 +85,8 @@ h2.section-name {
 
 .main-screen__favourite-product-pic img {
   position: relative;
-  top: 23px;
-  left: 14px;
+  /*top: 23px;
+  left: 14px;*/
 }
 
 .main-screen__favourite-product-pic img:hover {
