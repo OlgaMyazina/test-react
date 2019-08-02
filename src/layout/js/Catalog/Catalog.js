@@ -1,4 +1,4 @@
-import React from "react";
+import React, {Component} from "react";
 
 import Breadcrumbs from "../Breadcrumbs/Breadcrumbs";
 import Sidebar from "../Sidebar/Sidebar";
@@ -6,8 +6,12 @@ import SidebarComponents from "../SidebarComponent/SidebarComponent";
 import OverlookedSlider from "../OverlookedSlider/OverlookedSlider";
 import Pagination from "../Pagination/Pagination";
 import ProductList from "../ProductList/ProductList";
+import {CategoriesContext} from "../App";
 
-export default class Catalog extends React.Component {
+
+const {Provider, Consumer} = React.createContext();
+
+export default class Catalog extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -176,6 +180,9 @@ export default class Catalog extends React.Component {
     if (this.props.location.search.includes("search")) {
       return "Результаты поиска";
     }
+    if (this.props.location.pathname.includes("featured")) {
+      return "Новинки";
+    }
     return this.props.isMainMenuActive;
   };
 
@@ -186,7 +193,15 @@ export default class Catalog extends React.Component {
       <>
         {/*<!-- Каталог товаров -->*/}
         {/*<!-- Breadcrumbs -->*/}
-        <Breadcrumbs item={this.props.isMainMenuActive}{...this.props}/>
+        <CategoriesContext.Consumer>
+
+          {(categories) => {
+            console.log('catalog context', categories);
+            return(
+              <Breadcrumbs item={this.props.isMainMenuActive}{...this.props} categories={categories}/>
+            )
+          }}
+        </CategoriesContext.Consumer>
         {/*<!-- Тело каталога с сайдбаром -->*/}
         <main className="product-catalogue">
           {/*<!-- Сайдбар -->*/}
@@ -197,7 +212,8 @@ export default class Catalog extends React.Component {
             <section className="product-catalogue__head">
               <div className="product-catalogue__section-title">
                 <h2 className="section-name">{this.getHeader()}</h2>
-                <span className="amount">{`${this.state.products ? this.state.products.goods : ""} товаров`}</span>
+                <span
+                  className="amount">{this.state.products ? (this.state.products.goods ? `${this.state.products.goods} товаров` : "") : ""}</span>
               </div>
               <div className="product-catalogue__sort-by">
                 <p className="sort-by">Сортировать</p>
@@ -211,7 +227,7 @@ export default class Catalog extends React.Component {
             {/*<!-- Товары -->*/}
             <section className="product-catalogue__item-list">
 
-            <ProductList products={this.state.products ? this.state.products.data : []}/>
+              <ProductList products={this.state.products ? this.state.products.data : []}/>
             </section>
 
 
