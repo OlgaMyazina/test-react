@@ -23,7 +23,6 @@ const SubCategory = (props) => {
   };
 
   const getCategory = () => {
-    console.log(`subCategory`, categoryId);
     return categoryId ? `categoryId=${categoryId}&` : "";
   };
 

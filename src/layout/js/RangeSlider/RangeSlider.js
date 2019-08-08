@@ -94,4 +94,4 @@ RangeSlider.propTypes = {
   maxValuePx: PropTypes.number,
   handlerMinValue: PropTypes.func,
   handlerMaxValue: PropTypes.func,
-}
+};

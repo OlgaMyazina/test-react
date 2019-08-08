@@ -1,4 +1,4 @@
-import React, { Component} from "react";
+import React, {Component} from "react";
 import {BrowserRouter, Switch, Route} from 'react-router-dom';
 
 import HeaderComponent from "./HeaderComponent/HeaderComponent";
@@ -10,42 +10,112 @@ import ProductList from "./ProductList/ProductList";
 import Order from "./Order/Order";
 import Favorite from "./Favorite/Favorite";
 import About from "./About/About";
+import Cart from "./Cart/Cart";
 //import ProductComponent from "./ProductComponent/ProductComponent";
 
 export const CategoriesContext = React.createContext({
-  categories:[]
+    categories: []
   }
 );
 
 export default class App extends Component {
   constructor(props) {
     super(props);
+    this.state = {
+      products: [],
+    }
   }
 
   componentDidMount() {
-    const url = "https://api-neto.herokuapp.com/bosa-noga/categories";
+    const urlCategories = "https://api-neto.herokuapp.com/bosa-noga/categories";
+    const cartId = localStorage.getItem("cartId") ? JSON.parse(localStorage.getItem("cartId")) : '';
+    const urlCart = `https://api-neto.herokuapp.com/bosa-noga/cart/${cartId}`;
+
+
     const params = {
       method: 'GET',
       headers: new Headers({
         'Content-Type': 'application/json'
       })
     };
-    fetch(url, params)
+    fetch(urlCategories, params)
       .then(response => response.json())
       .then(result => this.setState({categories: result}));
+    if (cartId) {
+      fetch(urlCart, params)
+        .then(response => response.json())
+        .then(result => this.setState({products: result.data.products}))
+    }
   }
+
+  handlerAddToCart = (id, size, amount) => {
+    const obj = localStorage.getItem("cartId");
+    const cartId = (obj && obj != "undefined") ? JSON.parse(localStorage.getItem("cartId")) : '';
+    const currentProduct = {
+      "id": parseInt(id),
+      "size": parseInt(size),
+      "amount": parseInt(amount)
+    };
+    const params = {
+      method: 'POST',
+      headers: new Headers({
+        'Content-Type': 'application/json'
+      }),
+      body: JSON.stringify({
+        ...currentProduct
+      })
+    };
+    const url = `https://api-neto.herokuapp.com/bosa-noga/cart/${cartId ? cartId : ""}`;
+    fetch(url, params)
+      .then(response => response.json())
+      .then(result => {
+        localStorage.setItem("cartId", JSON.stringify(result.data.id));
+        const products = this.state.products ? this.state.products : [];
+        products.push(currentProduct);
+        this.setState({products: products})
+      })
+  };
+
+  handlerRemoveFromCart = (id, size, amount) => {
+    const obj = localStorage.getItem("cartId");
+    const cartId = (obj && obj != "undefined") ? JSON.parse(localStorage.getItem("cartId")) : '';
+
+    const params = {
+      method: 'POST',
+      headers: new Headers({
+        'Content-Type': 'application/json'
+      }),
+      body: JSON.stringify({
+        "id": parseInt(id),
+        "size": parseInt(size),
+        "amount": parseInt(amount)
+      })
+    };
+    const url = `https://api-neto.herokuapp.com/bosa-noga/cart/${cartId ? cartId : ""}`;
+    fetch(url, params)
+      .then(response => response.json())
+      .then(result => {
+        localStorage.setItem("cartId", JSON.stringify(result.data.id));
+        this.setState({products: result.data.products})
+      })
+      .catch(reason => {
+        localStorage.removeItem("cartId");
+        this.setState({products: []})
+      });
+
+  };
 
   render() {
     return (
       <BrowserRouter basename={process.env.PUBLIC_URL}>
         <CategoriesContext.Provider value={this.state}>
-          <HeaderComponent/>
+          <HeaderComponent onRemoveFromCart={this.handlerRemoveFromCart} products={this.state.products}/>
 
           <Switch>
             <Route exact path="/" component={Home}/>
-            {/*<Route path='/cart' component={Cart}/>*/}
+            <Route path="/cart" render={(props) => (<Cart {...props} products={this.state.products}/>)}/>
             <Route path="/product/:id?" render={(props) => (
-              <Product {...props}/>
+              <Product {...props} onAddToCart={this.handlerAddToCart}/>
             )}/>
             <Route path="/catalog/:id?" render={(props) => (
               <Catalog {...props} />

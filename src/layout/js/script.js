@@ -43,7 +43,6 @@ headerSearch.onclick = headerMainSearchVisibility;
 
 //Выпадающее меню главного меню (пока с общим списком для всех пунктов)
 function mainSubmenuVisibility() {
-    console.log(this.className);
     if (this.className.split(' ')[this.className.split(' ').length-1] === ('main-menu__item_active')) {
         document.querySelector('.dropped-menu').classList.remove('dropped-menu_visible')
         this.classList.remove('main-menu__item_active');

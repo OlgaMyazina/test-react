@@ -1,15 +1,6 @@
 import React from "react";
 import {Link} from "react-router-dom";
 
-/*
-* brand: "Christian Louboutin"
-categoryId: 13
-id: 33
-images: ["https://api-neto.herokuapp.com/bosa-noga/tufli_labuten_1.jpg"]
-price: 56000
-title: "Знаменитые лабутэны"
-*/
-
 const styleComponent = {
   height: '100%',
   width: '100%',
@@ -50,7 +41,6 @@ export default class ProductList extends React.Component {
       localStorage.setItem("products", JSON.stringify(returnObj));
     } else {
       localStorage.removeItem("products");
-      console.log(`returnObj`, returnObj);
       returnObj.products.splice(existElement, 1);
       localStorage.setItem("products", JSON.stringify(returnObj));
     }
@@ -67,8 +57,6 @@ export default class ProductList extends React.Component {
     return fetch(url, params)
       .then(response => response.json())
       .then(result => {
-        console.log(result);
-        console.log(this.state);
         return this.setState({[id]: result.data.sizes.map(elem => elem.available ? elem.size : "").join(", ")})
       });
   };
@@ -82,7 +70,7 @@ export default class ProductList extends React.Component {
 
         {this.props.products.map((product, index) => {
           return (
-            <Link to={`product/${product.id}`} className="item-list__item-card item" key={product.id}>
+            <Link to={`/product/${product.id}`} className="item-list__item-card item" key={product.id}>
               <div className="item-pic">
                 <img className={`item-pic-${index + 1}`}
                      src={product.images[0]}

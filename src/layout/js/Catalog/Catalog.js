@@ -103,13 +103,10 @@ export default class Catalog extends Component {
   //todo: взможно, перенести в продукт лист
   handlerFavoriteClick = (event) => {
     event.preventDefault();
-    console.log("click favorite", event.target.className);
     localStorage.setItem('myCat', 'Tom');
   };
 
   getProduct = (url, urlPath) => {
-    console.log(`get products`)
-    console.log(url, urlPath);
     let newUrl = 'https://api-neto.herokuapp.com/bosa-noga/';
     newUrl += url ? url : 'products';
 
@@ -117,8 +114,6 @@ export default class Catalog extends Component {
       newUrl += urlPath;
     }
 
-    console.log(newUrl);
-    console.log(urlPath);
 
     const params = {
       method: 'GET',
@@ -187,20 +182,15 @@ export default class Catalog extends Component {
   };
 
   render() {
-    console.log(`props Catalog`, this.props, this.props.match);
 
     return (
       <>
         {/*<!-- Каталог товаров -->*/}
         {/*<!-- Breadcrumbs -->*/}
         <CategoriesContext.Consumer>
-
-          {(categories) => {
-            console.log('catalog context', categories);
-            return(
-              <Breadcrumbs item={this.props.isMainMenuActive}{...this.props} categories={categories}/>
-            )
-          }}
+          {(categories) =>
+            <Breadcrumbs item={this.props.isMainMenuActive}{...this.props} categories={categories}/>
+          }
         </CategoriesContext.Consumer>
         {/*<!-- Тело каталога с сайдбаром -->*/}
         <main className="product-catalogue">

@@ -29,7 +29,6 @@ const Pagination = ({page, pages, onChange}) => {
       <ul>
         {console.log(pageArray)}
         {pageArray.map((value, index) => {
-          console.log(value, index)
           return (
             <li className={index + 1 == page ? "active" : ""} key={index}>
               <a href="#" name={index+1}>

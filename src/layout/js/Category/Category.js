@@ -23,10 +23,6 @@ export default class Category extends React.Component {
   isCategoryActive = (itemName, itemId) => {
     const filter = urlToFilters(this.props.location.search);
 
-    console.log('isCategoryActive, itemName', itemName);
-    console.log('isCategoryActive, itemId', itemId);
-    console.log('isCategoryActive, filter', filter);
-
     if (filter.search){
       return;
     }
@@ -36,7 +32,6 @@ export default class Category extends React.Component {
       if (!filter.categoryId) {
         return itemName === "Бренды" ? "main-menu__item_active" : "";
       }
-      console.log('category isActive', filter.categoryId);
       return parseInt(filter.categoryId) === parseInt(itemId) ? "main-menu__item_active" : "";
     }
 
@@ -57,9 +52,7 @@ export default class Category extends React.Component {
             <li className={`main-menu__item main-menu__item_sales ${this.isCategoryActive("Акции")}`}>
               <Link to= "/" data-category-id="">Акции</Link>
             </li>
-            {console.log(`render category`, this.props)}
             {(this.props.category.data) && (this.props.category.data.map(dataItem => {
-              console.log(`category id `, dataItem.id);
               return (
                 <li
                   className={`main-menu__item main-menu__item_women ${this.isCategoryActive(dataItem.title, dataItem.id)}`}
