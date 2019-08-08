@@ -43,7 +43,6 @@ export default class Sidebar extends React.Component {
 
   componentDidMount() {
 
-    console.log(`props sidebar`, this.props);
   }
 
   getSyncPrice = () => {
@@ -131,13 +130,8 @@ export default class Sidebar extends React.Component {
   parseUrl = (param, value) => {
     const result = urlToFilter(this.props.location.search);
     if (Array.isArray(result[param])) {
-      //массив
-      console.log("parse", result);
-      console.log("result ", result[param].includes(value))
       return result[param].includes(parseInt(value));
     }
-    console.log('parse', result);
-    console.log('param', param, "value", value);
     return result[param] === value;
   };
 
@@ -187,9 +181,6 @@ export default class Sidebar extends React.Component {
       if (!element.name) return;
       formField[element.name] = element.value;
     });
-    console.log("searchBrand formElement", formElement);
-    console.log("searchBrand formField", formField);
-    console.log("searchBrand", this.props);
 
 
     this.props.history.push({

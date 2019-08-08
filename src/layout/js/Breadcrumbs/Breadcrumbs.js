@@ -5,14 +5,11 @@ import filtersToUrl from "../filters/filtersToUrl";
 import urlToFilters from "../filters/urlToFilters";
 
 const Breadcrumbs = ({match, location, ...rest}) => {
-  console.log(`props BreadCrums`, match, rest);
 
   const getLink = () => {
     const result = [];
 
-    console.log(`breadcrumbs`, match, rest);
     const filters = urlToFilters(location.search);
-    console.log('breadcrums filters', filters);
 
     if (location.pathname.includes("favorite")) {
       result.push({
@@ -33,10 +30,12 @@ const Breadcrumbs = ({match, location, ...rest}) => {
     }
 
 
-    if ((filters.categoryId)&&(rest.categories)) {
+    if ((filters.categoryId) && (rest.categories) && (rest.categories.categories)) {
       result.push({
           link: `${location.pathname}?categoryId=${filters.categoryId}`,
-          value: rest.categories.categories.data.find(element=>{return element.id ==filters.categoryId}).title,
+          value: rest.categories.categories.data.find(element => {
+            return element.id == filters.categoryId
+          }).title,
         }
       )
     }
@@ -48,7 +47,29 @@ const Breadcrumbs = ({match, location, ...rest}) => {
         value: element ? element.value : "",
       });
     }
-    console.log(`result breadcrums`,result);
+
+    //Если страница продукта
+    if ((result.length === 0) && (location.pathname.includes("product"))) {
+      if ((rest.product) && (rest.product.categoryId) && (rest.categories) && (rest.categories.categories)) {
+        result.push({
+          link: `/catalog?categoryId=${rest.product.categoryId}`,
+          value: rest.categories.categories.data.find(element => {
+            return element.id == rest.product.categoryId;
+          }).title
+        })
+      }
+
+      if (rest.product.type) {
+        result.push({
+          link: `/catalog?${rest.product.categoryId ? 'categoryId=' + rest.product.categoryId : ''}&type=${rest.product.type}`,
+          value: rest.product.type
+        });
+      }
+      result.push({
+        link: location.pathname,
+        value: rest.product.title
+      });
+    }
     return result;
   };
 
@@ -79,9 +100,9 @@ const Breadcrumbs = ({match, location, ...rest}) => {
     <div className="site-path">
       <ul className="site-path__items">
         <li className="site-path__item" key="Главная"><Link to="/">Главная</Link></li>
-        {getLink().map(element => {
+        {getLink().map((element, index) => {
           return (
-            <li className="site-path__item" key={element.value}>
+            <li className="site-path__item" key={`${element.value}${index}`}>
               <Link to={element.link}>{element.value}</Link>
             </li>
           )

@@ -13,7 +13,6 @@ const Favorite = (props) => {
     return products.products.length > 0 ? false : true;
   };
 
-  console.log('favorite----------->', products);
   const handleSort = (event) => {
     if (event.target.value === "price") {
       setSortFavoriteProduct("price");

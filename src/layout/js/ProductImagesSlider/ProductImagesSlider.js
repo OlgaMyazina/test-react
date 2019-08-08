@@ -1,6 +1,6 @@
 import React, {useState} from "react";
 
-const ProductSlider = ({images, onClick}) => {
+const ProductImagesSlider = ({images, onClick}) => {
   const [startIndex, setStartIndex] = useState(0);
 
   const isVisible = () => {
@@ -38,7 +38,7 @@ const ProductSlider = ({images, onClick}) => {
     <>
       <section className={`main-screen__favourite-product-slider ${isVisible()}`}>
         <div className="favourite-product-slider">
-          <div
+          <div key="productSliderUp"
             className={`favourite-product-slider__arrow favourite-product-slider__arrow_up arrow-up ${isVisibleArrow()}`}
             onClick={handlerArrowUp}
           />
@@ -56,30 +56,7 @@ const ProductSlider = ({images, onClick}) => {
               </div>
             )
           })}
-          {/*}
-          <div className="favourite-product-slider__item favourite-product-slider__item-1">
-            <a href="#" onClick={onClick}>
-              <img src={this.state.product.images ? this.state.product.images[0] : "#"}
-                   alt=""
-                   style={{width: "100%", height: "100%"}}/>
-            </a>
-          </div>
-          <div className="favourite-product-slider__item favourite-product-slider__item-2">
-            <a href="#">
-              <img src={this.state.product.images ? this.state.product.images[0] : "#"}
-                   alt=""
-                   style={{width: "100%", height: "100%"}}/>
-            </a>
-          </div>
-          <div className="favourite-product-slider__item favourite-product-slider__item-3">
-            <a href="#">
-              <img src={this.state.product.images ? this.state.product.images[0] : "#"}
-                   alt=""
-                   style={{width: "100%", height: "100%"}}/>
-            </a>
-          </div>
-          */}
-          <div
+          <div key="productSliderDown"
             className={`favourite-product-slider__arrow favourite-product-slider__arrow_down arrow-down ${isVisibleArrow()}`}
             onClick={handlerArrowDown}/>
         </div>
@@ -88,4 +65,4 @@ const ProductSlider = ({images, onClick}) => {
   )
 };
 
-export default ProductSlider;
+export default ProductImagesSlider;
