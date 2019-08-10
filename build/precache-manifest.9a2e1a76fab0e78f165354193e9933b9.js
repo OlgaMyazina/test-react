@@ -1,19 +1,19 @@
 self.__precacheManifest = (self.__precacheManifest || []).concat([
   {
-    "revision": "f4c4b19cf5b2b7b56e6c5e33b95731b3",
+    "revision": "829ece6570f34893f3f852ed52e15921",
     "url": "/react-diplom/build/index.html"
   },
   {
-    "revision": "97621d1f18181caa1508",
+    "revision": "2ab1675085897a464300",
     "url": "/react-diplom/build/static/css/main.89502c42.chunk.css"
   },
   {
-    "revision": "3e0bb0eaba20e604ffa5",
-    "url": "/react-diplom/build/static/js/2.345ab421.chunk.js"
+    "revision": "f4279e3da0a0a72410c0",
+    "url": "/react-diplom/build/static/js/2.37fab9a3.chunk.js"
   },
   {
-    "revision": "97621d1f18181caa1508",
-    "url": "/react-diplom/build/static/js/main.faa2c2d0.chunk.js"
+    "revision": "2ab1675085897a464300",
+    "url": "/react-diplom/build/static/js/main.29c17d09.chunk.js"
   },
   {
     "revision": "6cb4c4d6b4b02eaa33bc",
