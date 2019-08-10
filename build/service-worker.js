@@ -14,7 +14,7 @@
 importScripts("https://storage.googleapis.com/workbox-cdn/releases/4.3.1/workbox-sw.js");
 
 importScripts(
-  "/react-diplom/build/precache-manifest.5d8f0150d26eec0a0f7c21deff7dddce.js"
+  "/react-diplom/build/precache-manifest.9a2e1a76fab0e78f165354193e9933b9.js"
 );
 
 self.addEventListener('message', (event) => {

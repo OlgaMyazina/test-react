@@ -11,6 +11,7 @@ import Order from "./Order/Order";
 import Favorite from "./Favorite/Favorite";
 import About from "./About/About";
 import Cart from "./Cart/Cart";
+import OrderDone from "./OrderDone/OrderDone";
 //import ProductComponent from "./ProductComponent/ProductComponent";
 
 export const CategoriesContext = React.createContext({
@@ -44,7 +45,10 @@ export default class App extends Component {
     if (cartId) {
       fetch(urlCart, params)
         .then(response => response.json())
-        .then(result => this.setState({products: result.data.products}))
+        .then(result => {
+          console.log("mount result", result);
+          this.setState({products: result.data ? result.data.products : this.state.products})
+        })
     }
   }
 
@@ -69,10 +73,21 @@ export default class App extends Component {
     fetch(url, params)
       .then(response => response.json())
       .then(result => {
-        localStorage.setItem("cartId", JSON.stringify(result.data.id));
+        if (result.data) {
+          localStorage.setItem("cartId", JSON.stringify(result.data.id));
+        }
         const products = this.state.products ? this.state.products : [];
-        products.push(currentProduct);
-        this.setState({products: products})
+        const productIndex = products.findIndex(product => {
+          return product.id === currentProduct.id
+        });
+        if (productIndex === -1) {
+          //такого товара нет
+          products.push(currentProduct);
+        } else {
+          products[productIndex] = currentProduct;
+        }
+        this.setState({products: products});
+
       })
   };
 
@@ -95,6 +110,7 @@ export default class App extends Component {
     fetch(url, params)
       .then(response => response.json())
       .then(result => {
+        console.log("remove in app handler", result);
         localStorage.setItem("cartId", JSON.stringify(result.data.id));
         this.setState({products: result.data.products})
       })
@@ -121,7 +137,11 @@ export default class App extends Component {
               <Catalog {...props} />
             )}/>
             <Route path="/productlist" component={ProductList}/>
-            <Route path="/order" component={Order}/>
+            <Route path="/order" component={(props) => (<Order {...props}
+                                                               products={this.state.products}
+                                                               onAdd={this.handlerAddToCart}
+                                                               onRemove={this.handlerRemoveFromCart}/>)}/>
+            <Route path="/orderdone" component ={OrderDone}/>
             <Route path="/favorite" component={Favorite}/>
             <Route path="/about" component={About}/>
 

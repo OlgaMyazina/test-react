@@ -8,7 +8,15 @@ export default class OverlookedSlider extends React.Component {
       renderProduct: [],
       renderStartIndex: 0
     };
+  }
+
+  componentDidMount() {
     this.getRenderProduct();
+
+  }
+
+  componentDidUpdate(prevProps, prevState, snapshot) {
+
   }
 
   getRenderProduct = () => {

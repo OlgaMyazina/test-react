@@ -38,7 +38,7 @@ export default class Subscrible extends React.Component {
 
 
   isDisplay = (component) => {
-    if (component == "form") {
+    if (component === "form") {
       return this.state.isSend ? {display: "none"} : {display: "inherit"};
     }
 
