@@ -90,7 +90,6 @@ export default class ProductList extends React.Component {
                 <div className="sizes">
                   <p className="sizes__title">Размеры в наличии:</p>
                   <p className="sizes__avalible">
-                    {console.log('state', this.state)}
                     {this.state ? this.state[product.id] : "нет данных"}</p>
                 </div>
               </div>

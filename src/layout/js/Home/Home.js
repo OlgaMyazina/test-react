@@ -1,16 +1,16 @@
 import React from "react";
 
 import Slider from "../Slider/Slider";
-import NewProducts from "../NewProducts/NewPropducts";
+import NewProducts from "../NewProducts/NewProducts";
 import SalesAndNews from "../SalesAndNews/SalesAndNews";
 import About from "../About/About";
 
-const Home = () => {
+const Home = (props) => {
   return (
     <>
       <Slider/>
 
-      <NewProducts/>
+      <NewProducts {...props}/>
 
       <SalesAndNews/>
 

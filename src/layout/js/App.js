@@ -46,7 +46,6 @@ export default class App extends Component {
       fetch(urlCart, params)
         .then(response => response.json())
         .then(result => {
-          console.log("mount result", result);
           this.setState({products: result.data ? result.data.products : this.state.products})
         })
     }
@@ -110,7 +109,6 @@ export default class App extends Component {
     fetch(url, params)
       .then(response => response.json())
       .then(result => {
-        console.log("remove in app handler", result);
         localStorage.setItem("cartId", JSON.stringify(result.data.id));
         this.setState({products: result.data.products})
       })

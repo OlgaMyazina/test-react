@@ -10,6 +10,7 @@ export default class CartList extends React.Component {
 
 
   componentDidMount() {
+    if (!this.props.products) return;
     if (this.props.products.length === 0) return;
     this.props.products.map(product => {
       this.getProduct(product.id);
@@ -23,7 +24,7 @@ export default class CartList extends React.Component {
 
 
   componentDidUpdate(prevProps, prevState, snapshot) {
-    if (this.props.products.length === 0) {
+    if ((!this.props.products)||(this.props.products.length === 0)) {
       return;
     }
 
@@ -68,6 +69,12 @@ export default class CartList extends React.Component {
   };
 
   render() {
+    if (!this.props.products){
+      return (
+        <div className="basket-dropped__title">
+          В корзине пока ничего нет. Не знаете, с чего начать? Посмотрите наши новинки!
+        </div>);
+    }
     if (this.props.products.length === 0) {
       return (
         <div className="basket-dropped__title">
