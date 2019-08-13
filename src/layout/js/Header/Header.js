@@ -1,12 +1,16 @@
 import React from 'react';
 import {Link} from "react-router-dom";
+import PropTypes from "prop-types";
+
 
 import CategoriesComponent from "../CategoriesComponent/CategoriesComponent";
 import SubCategoryComponent from "../SubCategoryComponent/SubCategoryComponent";
 import Search from "../Search/Search";
+import CartList from "../CartList/CartList";
+import RangeSlider from "../RangeSlider/RangeSlider";
+
 
 import logo from '../../img/header-logo.png';
-import productListPic1 from '../../img/product-list__pic_1.jpg';
 
 export default class Header extends React.Component {
   constructor(props) {
@@ -29,7 +33,10 @@ export default class Header extends React.Component {
   }
 
   componentDidMount() {
-
+    //Если корзина
+    if (this.props.location.pathname.includes("cart")) {
+      this.setState({isActive: "basket", isBasketActive: true, isHiddenPanel: true});
+    }
   }
 
   componentDidUpdate(prevProps, prevState, snapshot) {
@@ -38,12 +45,24 @@ export default class Header extends React.Component {
         isSubCategoryVisible: false
       })
     }
+    if (prevProps.location !== this.props.location) {
+      //поменялся location, скрываем панель с профилем, корзиной
+      this.setState({isActive: "", isBasketActive: false, isProfileActive: false, isHiddenPanel: false})
+    }
+    if ((prevState.isActive !== this.state.isActive) &&
+      (prevState.isBasketActive !== this.state.isBasketActive) &&
+      (prevState.isHiddenPanel !== this.state.isHiddenPanel)) {
+      //Если корзина
+      if (this.props.location.pathname.includes("cart")) {
+        this.setState({isActive: "basket", isBasketActive: true, isHiddenPanel: true});
+      }
+    }
 
   }
 
   //todo: добавить сам класс
-  isBasketActive = (value) => {
-    return value ? "header-main__pic_basket_menu_is-active" : "";
+  isBasketActive = () => {
+    return this.state.isBasketActive ? "header-main__pic_basket_menu_is-active" : "";
   };
 
   isBasketVisible = () => {
@@ -111,7 +130,6 @@ export default class Header extends React.Component {
 
   handlerCategory = (event) => {
     event.preventDefault();
-    console.log(`handlerCategory`, event.target);
     this.setState({
       isSubCategoryVisible: !this.state.isSubCategoryVisible,
       categoryId: event.target.getAttribute("data-category-id") ? event.target.getAttribute("data-category-id") : "",
@@ -123,7 +141,6 @@ export default class Header extends React.Component {
     return (
       <>
         <header className="header">
-
           <div className="top-menu">
             <div className="wrapper">
               <ul className="top-menu__items">
@@ -152,8 +169,7 @@ export default class Header extends React.Component {
                 <p>Ежедневно: с 09-00 до 21-00</p>
               </div>
               <div className="header-main__logo">
-                <Link to='/'>
-
+                <Link to="/">
                   <h1>
                     <img src={logo} alt="logotype"/>
                   </h1>
@@ -184,7 +200,6 @@ export default class Header extends React.Component {
             </div>
             <div className={`header-main__hidden-panel hidden-panel ${this.isPanelVisible()}`}>
               <div className="wrapper">
-                {/*todo: некорректна работа isProfileVisible*/}
                 <div className={`hidden-panel__profile ${this.isProfileVisible()}`}>
                   <a href="#">Личный кабинет</a>
                   <Link to="/favorite">
@@ -192,60 +207,11 @@ export default class Header extends React.Component {
                   <a href="#">Выйти</a>
                 </div>
                 <div className={`hidden-panel__basket basket-dropped ${this.isBasketVisible()}`}>
-                  <div className="basket-dropped__title">В вашей корзине:</div>
-                  <div className="basket-dropped__product-list product-list">
-                    <div className="product-list__item">
-                      <a className="product-list__pic">
-                        <img src={productListPic1} alt="product"/> </a>
-                      <a href="#" className="product-list__product">Ботинки женские, Baldinini</a>
-                      <div className="product-list__fill"/>
-                      <div className="product-list__price">12 360
-                        <i className="fa fa-rub" aria-hidden="true"/>
-                      </div>
-                      <div className="product-list__delete">
-                        <i className="fa fa-times" aria-hidden="true"/>
-                      </div>
-                    </div>
-
-                    <div className="product-list__item">
-                      <a className="product-list__pic">
-                        <img src={productListPic1} alt="product"/> </a>
-                      <a href="#" className="product-list__product">Ботинки женские, Baldinini</a>
-                      <div className="product-list__fill"/>
-                      <div className="product-list__price">12 360
-                        <i className="fa fa-rub" aria-hidden="true"/>
-                      </div>
-                      <div className="product-list__delete">
-                        <i className="fa fa-times" aria-hidden="true"/>
-                      </div>
-                    </div>
-                    <div className="product-list__item">
-                      <a className="product-list__pic">
-                        <img src={productListPic1} alt="product"/> </a>
-                      <a href="#" className="product-list__product">Ботинки женские, Baldinini</a>
-                      <div className="product-list__fill"/>
-                      <div className="product-list__price">12 360
-                        <i className="fa fa-rub" aria-hidden="true"/>
-                      </div>
-                      <div className="product-list__delete">
-                        <i className="fa fa-times" aria-hidden="true"/>
-                      </div>
-                    </div>
-                    <div className="product-list__item">
-                      <a className="product-list__pic">
-                        <img src={productListPic1} alt="product"/> </a>
-                      <a href="#" className="product-list__product">Ботинки женские, Baldinini</a>
-                      <div className="product-list__fill"/>
-                      <div className="product-list__price">12 360
-                        <i className="fa fa-rub" aria-hidden="true"/>
-                      </div>
-                      <div className="product-list__delete">
-                        <i className="fa fa-times" aria-hidden="true"/>
-                      </div>
-                    </div>
-
-                  </div>
-                  <Link className="basket-dropped__order-button" to="/order">Оформить заказ</Link>
+                  <CartList location={this.props.location}
+                            history={this.props.history}
+                            onRemoveFromCart={this.props.onRemoveFromCart}
+                            products ={this.props.products}
+                  />
                 </div>
               </div>
             </div>
@@ -259,13 +225,6 @@ export default class Header extends React.Component {
           </nav>
 
           <div className={`dropped-menu ${this.isDroppedMenuVisible()}`}>
-
-            {/*Повод*/}
-            {/*Категории*/}
-            {/*Сезон*/}
-
-            {/*Brand*/}
-            {console.log(`header`, this.state, this.props)}
             <SubCategoryComponent categoryName={this.props.isMainMenuActive}
                                   onClick={this.props.subMenuClick}
                                   categoryId={this.state.categoryId}/>
@@ -278,4 +237,12 @@ export default class Header extends React.Component {
   };
 }
 
+Header.propTypes = {
+  onRemoveFromCart: PropTypes.func,
+  history: PropTypes.object,
+  location: PropTypes.object,
+  match: PropTypes.object,
+  staticContext: PropTypes.object,
+  products: PropTypes.array,
+};
 

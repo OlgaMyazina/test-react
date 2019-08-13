@@ -43,15 +43,10 @@ export default class Sidebar extends React.Component {
 
   componentDidMount() {
 
-    console.log(`props sidebar`, this.props);
   }
 
   getSyncPrice = () => {
     const filters = urlToFilter(this.props.location.search);
-    console.log(`filters`, filters);
-    console.log('state', this.state);
-    console.log(!!filters.minPrice);
-    console.log(filters.minPrice != this.state.minValueRub);
 
 
     if ((!!filters.minPrice) && (filters.minPrice != this.state.minValueRub)) {
@@ -70,7 +65,6 @@ export default class Sidebar extends React.Component {
 
   componentDidUpdate(prevProps, prevState, snapshot) {
 
-    console.log(`prosp update`, this.props, this.state);
   }
 
 
@@ -91,9 +85,7 @@ export default class Sidebar extends React.Component {
 
   getParam = (url, param) => {
     const value = urlToFilter(url);
-    console.log("value", value);
     const paramArray = this.parseQueryString(url);
-    console.log("paramArray", paramArray)
     const paramElement = paramArray.find((element) => {
       return element.param === param;
     });
@@ -131,13 +123,8 @@ export default class Sidebar extends React.Component {
   parseUrl = (param, value) => {
     const result = urlToFilter(this.props.location.search);
     if (Array.isArray(result[param])) {
-      //массив
-      console.log("parse", result);
-      console.log("result ", result[param].includes(value))
       return result[param].includes(parseInt(value));
     }
-    console.log('parse', result);
-    console.log('param', param, "value", value);
     return result[param] === value;
   };
 
@@ -177,6 +164,22 @@ export default class Sidebar extends React.Component {
   getResetUrl = () => {
     const categoryId = urlToFilter(this.props.location.search).categoryId;
     return categoryId ? `catalog/products?categoryId=${categoryId}` : "/catalog";
+  };
+
+  handlerSearchBrand = (event) => {
+    event.preventDefault();
+    const formField = [], formElement = event.target;
+    Array.from(formElement).forEach(element => {
+      if (!element) return;
+      if (!element.name) return;
+      formField[element.name] = element.value;
+    });
+
+
+    this.props.history.push({
+      pathname: '/catalog',
+      search: `${this.props.location.search}&brand=${formField["searchBrand"]}`
+    });
   };
 
   render() {
@@ -379,8 +382,8 @@ export default class Sidebar extends React.Component {
         <section className="sidebar__division">
           <div className="sidebar__brand">
             <h3> Бренд </h3>
-            <form action="post" className="brand-search">
-              <input type="search" className="brand-search" id="brand-search" placeholder="Поиск"/>
+            <form className="brand-search" onSubmit={this.handlerSearchBrand}>
+              <input type="search" name="searchBrand" className="brand-search" id="brand-search" placeholder="Поиск"/>
               <input type="submit" name="" value="" className="submit"/>
             </form>
           </div>

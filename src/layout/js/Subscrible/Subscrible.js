@@ -31,14 +31,13 @@ export default class Subscrible extends React.Component {
     this.setState({
       isSend: true,
     });
-    console.log(formField);
     //данные для отправки:
     //console.log(JSON.stringify(formField));
   };
 
 
   isDisplay = (component) => {
-    if (component == "form") {
+    if (component === "form") {
       return this.state.isSend ? {display: "none"} : {display: "inherit"};
     }
 

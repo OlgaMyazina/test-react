@@ -1,26 +1,28 @@
 import React from "react";
 import {Link} from "react-router-dom";
 
-const Breadcrumbs = ({match, ...rest}) => {
-  console.log(`props BreadCrums`, match, rest);
+import filtersToUrl from "../filters/filtersToUrl";
+import urlToFilters from "../filters/urlToFilters";
+
+const Breadcrumbs = ({match, location, ...rest}) => {
 
   const getLink = () => {
     const result = [];
 
-    console.log(`breadcrumbs`, match, rest);
+    const filters = urlToFilters(location.search);
 
-    if (rest.location.pathname.includes("favorite")){
+    if (location.pathname.includes("favorite")) {
       result.push({
-          link: `${rest.location.pathname}${rest.location.search}`,
+          link: `${location.pathname}${location.search}`,
           value: "Избранное",
         }
       );
       return result;
     }
 
-    if (rest.location.search.includes("search")) {
+    if (location.search.includes("search")) {
       result.push({
-          link: `${rest.location.pathname}${rest.location.search}`,
+          link: `${location.pathname}${location.search}`,
           value: "Результаты поиска",
         }
       );
@@ -28,24 +30,49 @@ const Breadcrumbs = ({match, ...rest}) => {
     }
 
 
-
-    if (rest.categoryId) {
+    if ((filters.categoryId) && (rest.categories) && (rest.categories.categories)) {
       result.push({
-          link: `${rest.location.pathname}?categoryId=${rest.categoryId}`,
-          value: rest.item,
+          link: `${location.pathname}?categoryId=${filters.categoryId}`,
+          value: rest.categories.categories.data.find(element => {
+            return element.id == filters.categoryId
+          }).title,
         }
       )
     }
 
-    if (rest.location.search.includes("type")) {
-      const element = getParam(rest.location.search, "type");
+    if (filters.type) {
+      const element = getParam(location.search, "type");
       result.push({
-        link: `${rest.location.pathname}${rest.location.search}`,
+        link: `${location.pathname}${location.search}`,
         value: element ? element.value : "",
+      });
+    }
+
+    //Если страница продукта
+    if ((result.length === 0) && (location.pathname.includes("product"))) {
+      if ((rest.product) && (rest.product.categoryId) && (rest.categories) && (rest.categories.categories)) {
+        result.push({
+          link: `/catalog?categoryId=${rest.product.categoryId}`,
+          value: rest.categories.categories.data.find(element => {
+            return element.id == rest.product.categoryId;
+          }).title
+        })
+      }
+
+      if (rest.product.type) {
+        result.push({
+          link: `/catalog?${rest.product.categoryId ? 'categoryId=' + rest.product.categoryId : ''}&type=${rest.product.type}`,
+          value: rest.product.type
+        });
+      }
+      result.push({
+        link: location.pathname,
+        value: rest.product.title
       });
     }
     return result;
   };
+
 
   const parseQueryString = (url) => {
     const paramString = url.substring(1),
@@ -73,9 +100,9 @@ const Breadcrumbs = ({match, ...rest}) => {
     <div className="site-path">
       <ul className="site-path__items">
         <li className="site-path__item" key="Главная"><Link to="/">Главная</Link></li>
-        {getLink().map(element => {
+        {getLink().map((element, index) => {
           return (
-            <li className="site-path__item" key={element.value}>
+            <li className="site-path__item" key={`${element.value}${index}`}>
               <Link to={element.link}>{element.value}</Link>
             </li>
           )

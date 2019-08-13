@@ -27,9 +27,7 @@ const Pagination = ({page, pages, onChange}) => {
         {/*<Link to={{pathname: `/catalog/${urlPath}`, search: `?page=${page - 1}`}}/>*/}
       </div>
       <ul>
-        {console.log(pageArray)}
         {pageArray.map((value, index) => {
-          console.log(value, index)
           return (
             <li className={index + 1 == page ? "active" : ""} key={index}>
               <a href="#" name={index+1}>

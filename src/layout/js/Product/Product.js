@@ -2,7 +2,10 @@ import React from "react";
 import {Link} from "react-router-dom";
 
 import Breadcrumbs from "../Breadcrumbs/Breadcrumbs";
-import ProductSlider from "../ProductSlider/ProductSlider";
+import ProductImagesSlider from "../ProductImagesSlider/ProductImagesSlider";
+import {CategoriesContext} from "../App";
+import OverlookedSlider from "../OverlookedSlider/OverlookedSlider";
+import SimilarSlider from "../SimilarSlider/SimilarSlider";
 
 /*
 * {
@@ -37,6 +40,40 @@ import ProductSlider from "../ProductSlider/ProductSlider";
 }
 */
 
+/**
+ * При добавлении товара в корзину в localStorage проверяется наличие идентификатора корзины,
+ * если он доступен, то запрос отправляется вместе в ним.
+ *
+ * В противном случае запрос отправляется без идентификатора,
+ * полученный ответ сохраняется в localStorage.
+ *
+ * оздание корзины
+
+ POST /cart/ — создать новую корзину.
+
+ Формат данных при отправке json-объект. Пример запроса:
+
+ {
+  "id": 42,
+  "size": 14,
+  "amount": 12
+}
+ Тут:
+
+ id — идентификатор товара на сервере, число;
+ size — размер выбранного товара, число;
+ amount — количество единиц выбранного товара, число;
+ Указанный товар будет добавлен в корзину.
+
+ В ответ приходит либо объект с описанием ошибки, либо идентификатор новой корзины.
+
+ {
+    "id": "-LGp7nXm_acnkzaFQU4Y",
+    "status": "ok"
+}
+
+ * */
+
 export default class Product extends React.Component {
   constructor(props) {
     super(props);
@@ -50,43 +87,49 @@ export default class Product extends React.Component {
 
 
   getProduct = () => {
-    console.log(this.props);
     const id = this.props.match.params.id;
-    console.log('id', id);
 
     const params = {
       method: 'GET',
       headers: new Headers({
         'Content-Type': 'application/json'
-      })
+      }),
     };
     const url = `https://api-neto.herokuapp.com/bosa-noga/products/${id}`;
-    console.log('url', url);
     return fetch(url, params)
       .then(response => response.json())
-      .then(result => this.setState({product: result.data}));
+      .then(result => {
+        this.setState({product: result.data});
+        sessionStorage.setItem(this.props.match.params.id, JSON.stringify(result.data));
+      });
 
   };
+
 
   componentDidMount() {
     this.getProduct();
   }
 
-  /*
-      componentDidUpdate(prevProps, prevState, snapshot) {
-        /*console.log(this.props, prevProps);
-        console.log(this.state, prevState);
-        if ((prevProps == this.props) && (prevState == this.state)) {
-          return;
-        }
-        this.getProduct();
-        console.log(this.state);
 
-        this.getBasketName=()=>{
-          return this.state.currentSize ? "В корзину" : "Выберите размер!"
-        }
-      }
-      */
+  componentDidUpdate(prevProps, prevState, snapshot) {
+    if (prevProps.location.pathname !== this.props.location.pathname) {
+      this.getProduct();
+    }
+
+
+    /*console.log(this.props, prevProps);
+    console.log(this.state, prevState);
+    if ((prevProps == this.props) && (prevState == this.state)) {
+      return;
+    }
+    this.getProduct();
+    console.log(this.state);
+
+    this.getBasketName=()=>{
+      return this.state.currentSize ? "В корзину" : "Выберите размер!"
+    }*/
+  }
+
 
   handlerSize = (event) => {
     event.preventDefault();
@@ -102,7 +145,6 @@ export default class Product extends React.Component {
 
   handlerFavourite = (event) => {
     event.preventDefault();
-    console.log(`handler favorite`, event.target);
     //получаем значения из хранилица
     const returnObj = JSON.parse(localStorage.getItem("products"));
     if (!returnObj) {
@@ -141,8 +183,10 @@ export default class Product extends React.Component {
 
   handlerCart = (event) => {
     if (!this.state.currentSize) {
-      this.setState({cartName: "Выберите размер!"})
+      this.setState({cartName: "Выберите размер!"});
+      return;
     }
+    this.props.onAddToCart(this.state.product.id, this.state.currentSize, this.state.quantity);
   };
 
 
@@ -151,14 +195,17 @@ export default class Product extends React.Component {
       <>
         {/*<!-- Карточка товара -->*/}
         {/*<!-- Breadcrumbs -->*/}
-        <Breadcrumbs {...this.props}/>
+        <CategoriesContext.Consumer>
+          {(categories) => <Breadcrumbs {...this.props}{...this.state} categories={categories}/>}
+        </CategoriesContext.Consumer>
+
         {/*<!-- Тело карточки товара -->*/}
         <main className="product-card">
           <section className="product-card-content">
             <h2 className="section-name">{this.state.product.title}</h2>
             <section className="product-card-content__main-screen">
               {/*<!-- Слайдер выбранного товара -->*/}
-              <ProductSlider images={this.state.product.images} onClick={this.handlerImagesClick}/>
+              <ProductImagesSlider images={this.state.product.images} onClick={this.handlerImagesClick}/>
               {/*<!-- Изображение выбранного товара -->*/}
               <div className="main-screen__favourite-product-pic">
                 <a href="#">
@@ -173,10 +220,10 @@ export default class Product extends React.Component {
 
 
               <div className="main-screen__product-info">
-                <div className="product-info-title"><h2>{this.state.product.title}</h2>
+                <div className="product-info-title" key="productTitle"><h2>{this.state.product.title}</h2>
                   <div className="in-stock">В наличии</div>
                 </div>
-                <div className="product-features">
+                <div className="product-features" key="productFeatures">
                   <table className="features-table">
                     <thead className="hidden">
                     <tr>
@@ -217,33 +264,38 @@ export default class Product extends React.Component {
                   </table>
                 </div>
                 <p className="size">Размер</p>
-                <ul className="sizes">
-                  {this.state.product ? this.state.product.sizes.map(sizeItem => {
+                <ul className="sizes"
+                    style={{
+                      top: "19px",
+                      left: "130px",
+                    }}>
+                  {this.state.product ? this.state.product.sizes.map((sizeItem, index) => {
+                    if (!sizeItem.available) return (<React.Fragment key={`sizes${index}`}></React.Fragment>);
                     return (
-                      <li key={sizeItem.size} onClick={this.handlerSize}
+                      <li key={`sizes${sizeItem.size}${index}`} onClick={this.handlerSize}
                           className={`${parseInt(this.state.currentSize) === parseInt(sizeItem.size) ? "active" : ""}`}>
                         <a href="#">{sizeItem.size}</a>
                       </li>
                     )
                   }) : (<></>)}
                 </ul>
-                <div className="size-wrapper">
+                <div className="size-wrapper" style={{left: "105px"}} key="productSizes">
                   <a href="#"><span className="size-rule"/><p className="size-table">Таблица размеров</p></a>
                 </div>
                 <a href="#" className="in-favourites-wrapper">
                   <div className="favourite" onClick={(event) => this.handlerFavourite(event)}/>
                   <p className="in-favourites">В избранное</p>
                 </a>
-                <div className="basket-item__quantity">
-                  <div className="basket-item__quantity-change basket-item-list__quantity-change_minus"
+                <div className="basket-item__quantity" key="productBasket">
+                  <div key="iconMinus" className="basket-item__quantity-change basket-item-list__quantity-change_minus"
                        onClick={this.handlerMinus}>-
                   </div>
                   {this.state.quantity}
-                  <div className="basket-item__quantity-change basket-item-list__quantity-change_plus"
+                  <div key="iconPlus" className="basket-item__quantity-change basket-item-list__quantity-change_plus"
                        onClick={this.handlerPlus}>+
                   </div>
                 </div>
-                <div className="price">{this.state.product.price} ₽</div>
+                <div className="price" key="productPrice">{this.state.product.price} ₽</div>
                 <button className={`in-basket in-basket-click ${this.isBasketVisible()}`}
                         onClick={this.handlerCart}>
                   {this.state.cartName}
@@ -261,79 +313,14 @@ export default class Product extends React.Component {
          Блок «Вы смотрели», где выводятся все товары (но не больше 10), страницы которых посетил пользователь во время текущей сессии. Если товаров 5 или меньше, то стрелочки «Назад» и «Вперёд» не отображаются. Если пользователь не смотрел никаких товаров, то блок не отображается.
          Блок «Похожие товары», где выводятся товары, чей Тип и Цвет совпадают с Типом и Цветом текущего товара. Если похожих товаров нет, то блок не отображается. Если товаров 3 или меньше, то стрелочки «Назад» и «Вперёд» не отображаются.
          */}
-        <section className="product-card__overlooked-slider">
-          <h3>Вы смотрели:</h3>
-          <div className="overlooked-slider">
-            <div className="overlooked-slider__arrow overlooked-slider__arrow_left arrow"/>
-            <div className="overlooked-slider__item overlooked-slider__item-1">
-              <a href="product-card-desktop.html"/>
-            </div>
-            <div className="overlooked-slider__item overlooked-slider__item-2">
-              <a href="product-card-desktop.html"/>
-            </div>
-            <div className="overlooked-slider__item overlooked-slider__item-3">
-              <a href="product-card-desktop.html"/>
-            </div>
-            <div className="overlooked-slider__item overlooked-slider__item-4">
-              <a href="product-card-desktop.html"/>
-            </div>
-            <div className="overlooked-slider__item overlooked-slider__item-5">
-              <a href="product-card-desktop.html"/>
-            </div>
-            <div className="overlooked-slider__arrow overlooked-slider__arrow_right arrow"/>
-          </div>
-        </section>
+         <OverlookedSlider/>
+
         {/*<!-- Слайдер "Похожие товары" -->*/}
-        <section className="product-card__similar-products-slider">
-          <h3>Похожие товары:</h3>
-          <div className="similar-products-slider">
-            <div className="similar-products-slider__arrow similar-products-slider__arrow_left arrow"/>
-            <div className="similar-products-slider__item-list__item-card item">
-              <div className="similar-products-slider__item">
-                <a href="product-card-desktop.html"><img
-                  src="img/product-card-pics/product-card__similar-products-slider-item-1.png"
-                  className="similar-products-slider__item-pic-1" alt="Ботинки женские"/>
-                </a>
-              </div>
-              <div className="similar-products-slider__item-desc">
-                <h4 className="similar-products-slider__item-name">Ботинки женские</h4>
-                <p className="similar-products-slider__item-producer">Производитель: <span
-                  className="producer">Norma J.Baker</span></p>
-                <p className="similar-products-slider__item-price">23 150</p>
-              </div>
-            </div>
-            <div className="similar-products-slider__item-list__item-card item">
-              <div className="similar-products-slider__item">
-                <a href="product-card-desktop.html"><img
-                  src="img/product-card-pics/product-card__similar-products-slider-item-2.png"
-                  className="similar-products-slider__item-pic-2" alt="Полуботинки женские"/></a>
-              </div>
-              <div className="similar-products-slider__item-desc">
-                <h4 className="similar-products-slider__item-name">Полуботинки женские</h4>
-                <p className="similar-products-slider__item-producer">Производитель: <span
-                  className="producer">Shoes Market</span></p>
-                <p className="similar-products-slider__item-price">4 670</p>
-              </div>
-            </div>
-            <div className="similar-products-slider__item-list__item-card item">
-              <div className="similar-products-slider__item">
-                <a href="product-card-desktop.html"><img
-                  src="img/product-card-pics/product-card__similar-products-slider-item-3.png"
-                  className="similar-products-slider__item-pic-3" alt="Ботинки женские"/>
-                </a></div>
-              <div className="similar-products-slider__item-desc">
-                <h4 className="similar-products-slider__item-name">Ботинки женские</h4>
-                <p className="similar-products-slider__item-producer">Производитель: <span
-                  className="producer">Menghi Shoes</span></p>
-                <p className="similar-products-slider__item-price">6 370</p>
-              </div>
-            </div>
-            <div className="similar-products-slider__arrow similar-products-slider__arrow_right arrow"/>
-          </div>
-        </section>
+        <SimilarSlider productType={this.state.product.type} productColor={this.state.productColor}/>
       </>
     )
   }
-};
+}
+;
 
 
