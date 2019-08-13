@@ -85,8 +85,8 @@ h2.section-name {
 
 .main-screen__favourite-product-pic img {
   position: relative;
-  top: 23px;
-  left: 14px;
+  /*top: 23px;
+  left: 14px;*/
 }
 
 .main-screen__favourite-product-pic img:hover {
@@ -195,8 +195,8 @@ a.main-screen__favourite-product-pic__zoom{
 
 .sizes {
   position: relative;
-  top: 19px;
-  left: 130px;
+  /*top: 19px;
+  left: 130px;*/
   display: inline-block;
 }
 

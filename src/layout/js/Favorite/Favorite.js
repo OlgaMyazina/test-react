@@ -13,7 +13,6 @@ const Favorite = (props) => {
     return products.products.length > 0 ? false : true;
   };
 
-  console.log('favorite----------->', products);
   const handleSort = (event) => {
     if (event.target.value === "price") {
       setSortFavoriteProduct("price");
@@ -78,7 +77,8 @@ const Favorite = (props) => {
           <section className="product-catalogue__item-list product-catalogue__item-list_favorite">
             {!isEmpty() && <ProductList products={sortFavoriteProduct === "popular" ? sortDesc() : sortAsc()}/>}
           </section>
-          <div className={`${isEmpty() ? "hidden" : ""} product-catalogue__pagination`}>
+          <div
+            className={`${products ? (products.products.length > 16 ? "" : "hidden") : "hidden"} product-catalogue__pagination`}>
             <Pagination/>
           </div>
         </main>
