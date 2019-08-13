@@ -19,12 +19,10 @@ export default class Catalog extends Component {
         {
           sortBy: 'popularity',
           page: 1,
-          //categoryId: this.props.categoryId === "" ? null : this.props.categoryId,
         }
       ,
     };
     if (this.props.products) {
-      console.log(this.props.products);
       this.state = {...this.state, products: this.props.products}
     }
 
@@ -36,8 +34,6 @@ export default class Catalog extends Component {
   componentDidMount() {
 
     if (this.props.match.params.id === 'featured') {
-      console.log('featured');
-      console.log(this.props);
     }
 
     if (this.state.filters.length === 0) {
@@ -98,12 +94,6 @@ export default class Catalog extends Component {
       filters: {...this.state.filters},
     })
 
-  };
-
-  //todo: взможно, перенести в продукт лист
-  handlerFavoriteClick = (event) => {
-    event.preventDefault();
-    localStorage.setItem('myCat', 'Tom');
   };
 
   getProduct = (url, urlPath) => {
